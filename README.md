@@ -1,7 +1,7 @@
 build:
 ```
 make
-``
+``` 
 COLOR SET: 
 ``` 
 ./matrix_asm red
