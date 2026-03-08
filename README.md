@@ -1,5 +1,5 @@
 
-# build:
+# BUILD:
 ```
 make
 ```
@@ -19,7 +19,7 @@ make
 ./matrix_asm white
 ```
 
-# Screenshots:
+# SCREENSHOTS:
 
 <img width="660" height="444" alt="image" src="https://github.com/user-attachments/assets/958532b5-d421-4a95-8fa8-cd1ac4263c8d" />
 <img width="660" height="444" alt="image" src="https://github.com/user-attachments/assets/aa8c979c-ee6f-4105-9e08-5ccd4c1d9694" />
