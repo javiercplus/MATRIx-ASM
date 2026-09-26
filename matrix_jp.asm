@@ -1,4 +1,4 @@
-; Matrix Effect in Assembly (x86_64)
+; Matrix Effect in Assembly (x86_64) 
 ; Support green, red, blue, white, purple, yellow, pink
 
 section .data
@@ -104,6 +104,19 @@ _start:
 .size_ok:
 
     xor rcx, rcx
+
+    ; --- INYECCIÓN ANSI PARA CASCADA DESCENDENTE ---
+    ; \e[H  -> Mueve el cursor a la fila 1, columna 1
+    ; \e[L  -> Inserta una línea nueva, empujando todo hacia abajo
+    mov byte [buffer + rcx], 0x1B
+    mov byte [buffer + rcx + 1], '['
+    mov byte [buffer + rcx + 2], 'H'
+    mov byte [buffer + rcx + 3], 0x1B
+    mov byte [buffer + rcx + 4], '['
+    mov byte [buffer + rcx + 5], 'L'
+    add rcx, 6
+    ; -----------------------------------------------
+
     xor r9, r9
 
 .col_loop:
@@ -172,8 +185,6 @@ _start:
     inc r9
     cmp r9, r12
     jb .col_loop
-
-    ; Se ha eliminado el bloque .end_row para evitar el doble salto de línea
 
 .flush:
     mov rax, 1
