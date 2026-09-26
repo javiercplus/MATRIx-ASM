@@ -23,10 +23,14 @@ section .data
     SYS_IOCTL  equ 16
     TIOCGWINSZ equ 0x5413
 
+    ; Estructura timespec para sys_nanosleep (segundos, nanosegundos)
+    time_spec  dq 0          ; 0 segundos
+               dq 50000000   ; 50,000,000 nanosegundos = 50 milisegundos
+
 section .bss
-    winsize    resw 4       
-    columns    resb 512     
-    buffer     resb 8192    
+    winsize    resw 4
+    columns    resb 512
+    buffer     resb 8192
     selected_c resq 1
 
 section .text
@@ -105,9 +109,6 @@ _start:
 
     xor rcx, rcx
 
-    ; --- INYECCIÓN ANSI PARA CASCADA DESCENDENTE ---
-    ; \e[H  -> Mueve el cursor a la fila 1, columna 1
-    ; \e[L  -> Inserta una línea nueva, empujando todo hacia abajo
     mov byte [buffer + rcx], 0x1B
     mov byte [buffer + rcx + 1], '['
     mov byte [buffer + rcx + 2], 'H'
@@ -115,7 +116,6 @@ _start:
     mov byte [buffer + rcx + 4], '['
     mov byte [buffer + rcx + 5], 'L'
     add rcx, 6
-    ; -----------------------------------------------
 
     xor r9, r9
 
@@ -187,17 +187,20 @@ _start:
     jb .col_loop
 
 .flush:
+    ; Escribir a STDOUT
     mov rax, 1
     mov rdi, 1
     mov rsi, buffer
     mov rdx, rcx
     syscall
 
-    mov r8, 0x01FFFFFF
-.delay:
-    dec r8
-    jnz .delay
-    
+    ; --- SUSPENSIÓN DEL KERNEL (Reemplazo del busy-wait) ---
+    mov rax, 35             ; syscall número 35: sys_nanosleep
+    mov rdi, time_spec      ; puntero a la estructura timespec
+    xor rsi, rsi            ; NULL para el tiempo restante
+    syscall
+    ; -------------------------------------------------------
+
     jmp .main_loop
 
 str_compare:
