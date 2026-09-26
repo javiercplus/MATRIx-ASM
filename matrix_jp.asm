@@ -23,7 +23,7 @@ section .data
     SYS_IOCTL  equ 16
     TIOCGWINSZ equ 0x5413
 
-    ; Estructura timespec para sys_nanosleep (segundos, nanosegundos)
+    ; Estructure for time_spec
     time_spec  dq 0          ; 0 segundos
                dq 50000000   ; 50,000,000 nanosegundos = 50 milisegundos
 
@@ -194,10 +194,10 @@ _start:
     mov rdx, rcx
     syscall
 
-    ; --- SUSPENSIÓN DEL KERNEL (Reemplazo del busy-wait) ---
-    mov rax, 35             ; syscall número 35: sys_nanosleep
-    mov rdi, time_spec      ; puntero a la estructura timespec
-    xor rsi, rsi            ; NULL para el tiempo restante
+    ; --- Kernel Suspension ---
+    mov rax, 35             ; syscall number 35: sys_nanosleep
+    mov rdi, time_spec      ; point to timespec
+    xor rsi, rsi            ; NULL for rest time
     syscall
     ; -------------------------------------------------------
 
