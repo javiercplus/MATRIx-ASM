@@ -1,10 +1,14 @@
+# MATRIx-ASM
+Simple MATRIX EFFECT FOR YOUR TERMINAL 
+- Language = Assembly x86_64
+- License = WTFPL
 
-# BUILD:
+### BUILD:
 ```
 make
 ```
 
-# COLOR SET: 
+### COLOR SET: 
 ``` 
 ./matrix_asm red
 
